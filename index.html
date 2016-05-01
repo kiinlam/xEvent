@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <title>xEvent.js</title>
+  <script src="xEvent.js"></script>
+</head>
+<body>
+    <h1>xEvent.js</h1>
+    <script>
+        var el = document.querySelector('h1');
+        var xe = xEvent(el);
+        function xe2 (e) {
+            console.log(e.data);
+        }
+        xe.on('xe', function(e) {
+            console.log(e.data);
+            console.log(e._args);
+        }, 'xe_data');
+        xe.on('xe2', xe2, 'xe2_data');
+        xe.trigger('xe xe2', 'xe_args');
+        // output
+        // xe_data
+        // xe_args
+        // xe2_data
+    </script>
+</body>
+</html>

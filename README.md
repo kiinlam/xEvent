@@ -1,2 +1,2 @@
 # xEvent
-Dom Event handler
+Dom Event manage
