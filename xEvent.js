@@ -45,6 +45,11 @@
         });
     };
     
+    // find all added events
+    xEvent.prototype.findAddedEvents = function () {
+        return Object.keys(this.handlers);
+    };
+    
     // add event listener
     xEvent.prototype.on = function (types, callback, data, capture) {
         var self = this;
@@ -76,7 +81,7 @@
     xEvent.prototype.off = function (types, callback, capture) {
         var self = this,
             elem = self.el;
-        elem && findEvents(types).forEach(function(type){
+        elem && (types ? findEvents(types) : Object.keys(self.handlers)).forEach(function(type){
             var handlers = self.handlers[type];
             self.findHandlers(type, callback).forEach(function(handler){
                 delete handlers[handler.i];
@@ -97,6 +102,17 @@
             elem.dispatchEvent(event);
         });
         return self;
+    };
+    
+    // remove everything
+    xEvent.prototype.destroy = function () {
+        this.off();
+        delete this.el.xEvent;
+        this.el = undefined;
+        delete this.el;
+        this.handlers = undefined;
+        delete this.handlers;
+        this.constructor = Object;
     };
     
     window.xEvent = xEvent;
