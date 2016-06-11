@@ -9,7 +9,7 @@
         }
         
         // attach to dom elem
-        target.xv = this;
+        target._xEvent = this;
         
         // dom elem access
         this.el = target;
@@ -95,7 +95,6 @@
     xv.prototype.trigger = function (types, args) {
         var self = this,
             elem = self.el;
-            
         elem && findEvents(types).forEach(function(type){
             event = xv.Event(type);
             event._args = args;
@@ -107,7 +106,7 @@
     // remove everything
     xv.prototype.destroy = function () {
         this.off();
-        delete this.el.xv;
+        delete this.el._xEvent;
         this.el = undefined;
         delete this.el;
         this.handlers = undefined;
