@@ -10,20 +10,24 @@
     <h1>xEvent.js</h1>
     <script>
         var el = document.querySelector('h1');
-        var xe = xEvent(el);
-        function xe2 (e) {
+        var vh1 = xEvent(el);
+        function xv2 (e) {
             console.log(e.data);
         }
-        xe.on('xe', function(e) {
+        vh1.on('xv', function(e) {
             console.log(e.data);
             console.log(e._args);
-        }, 'xe_data');
-        xe.on('xe2', xe2, 'xe2_data');
-        xe.trigger('xe xe2', 'xe_args');
+        }, 'xv_data');
+        vh1.on('xv2', xv2, 'xv2_data');
+        vh1.trigger('xv xv2', 'xv_args');
         // output
-        // xe_data
-        // xe_args
-        // xe2_data
+        // xv_data
+        // xv_args
+        // xv2_data
+        vh1.on('xv3 xv4', function () {console.log('xv3 xv4')});
+        vh1.trigger('xv3');
+        vh1.trigger('xv4');
+        vh1.on('click', function () {console.log('click')});
     </script>
 </body>
 </html>

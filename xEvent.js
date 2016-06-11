@@ -1,15 +1,15 @@
 ;(function (window) {
     
-    // xEvent constructor
-    var xEvent = function (target) {
+    // xv constructor
+    var xv = function (target) {
         
-        // auto use new xEvent()
-        if( !(this instanceof xEvent) ){
-            return new xEvent(target);
+        // auto use new xv()
+        if( !(this instanceof xv) ){
+            return new xv(target);
         }
         
         // attach to dom elem
-        target.xEvent = this;
+        target.xv = this;
         
         // dom elem access
         this.el = target;
@@ -20,13 +20,13 @@
     
     // find valid event type strings
     function findEvents (types) {
-        return (types || '').split(/\s/).filter(function(e){
+        return (types || '').split(/\s+/).filter(function(e){
             return !!e;
         });
     }
     
     // make a DocumentEvent
-    xEvent.Event = function (type, props) {
+    xv.Event = function (type, props) {
         var event = document.createEvent('Event'), bubbles = true;
         if (props) {
             for (var name in props) {
@@ -38,7 +38,7 @@
     };
     
     // find all event handlers of given type
-    xEvent.prototype.findHandlers = function (type, fn) {
+    xv.prototype.findHandlers = function (type, fn) {
         var self = this;
         return (self.handlers[type] || []).filter(function (handler) {
             return handler && (!fn || fn === handler.fn);
@@ -46,12 +46,12 @@
     };
     
     // find all added events
-    xEvent.prototype.findAddedEvents = function () {
+    xv.prototype.findAddedEvents = function () {
         return Object.keys(this.handlers);
     };
     
     // add event listener
-    xEvent.prototype.on = function (types, callback, data, capture) {
+    xv.prototype.on = function (types, callback, data, capture) {
         var self = this;
         var elem = self.el;
         elem && findEvents(types).forEach(function(type){
@@ -78,7 +78,7 @@
     };
     
     // remove event listener
-    xEvent.prototype.off = function (types, callback, capture) {
+    xv.prototype.off = function (types, callback, capture) {
         var self = this,
             elem = self.el;
         elem && (types ? findEvents(types) : Object.keys(self.handlers)).forEach(function(type){
@@ -92,12 +92,12 @@
     };
     
     // fire events with given types
-    xEvent.prototype.trigger = function (types, args) {
+    xv.prototype.trigger = function (types, args) {
         var self = this,
             elem = self.el;
             
         elem && findEvents(types).forEach(function(type){
-            event = xEvent.Event(type);
+            event = xv.Event(type);
             event._args = args;
             elem.dispatchEvent(event);
         });
@@ -105,9 +105,9 @@
     };
     
     // remove everything
-    xEvent.prototype.destroy = function () {
+    xv.prototype.destroy = function () {
         this.off();
-        delete this.el.xEvent;
+        delete this.el.xv;
         this.el = undefined;
         delete this.el;
         this.handlers = undefined;
@@ -115,5 +115,6 @@
         this.constructor = Object;
     };
     
-    window.xEvent = xEvent;
+    window.xEvent = xv;
+    window.XV === undefined && (window.XV = xv);
 })(window);
