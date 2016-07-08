@@ -18,8 +18,8 @@
             console.log(e.data);
             console.log(e._args);
         }, 'xv_data');
-        vh1.on('xv2', xv2, 'xv2_data');
-        vh1.trigger('xv xv2', 'xv_args');
+        vh1.on('xv2', xv2, 'on_xv2_data');
+        vh1.trigger('xv xv2', {_args:'trigger_xv_args'});
         // output
         // xv_data
         // xv_args

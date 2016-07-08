@@ -28,7 +28,7 @@
     // make a DocumentEvent
     xv.Event = function (type, props) {
         var event = document.createEvent('Event'), bubbles = true;
-        if (props) {
+        if (typeof props === 'object') {
             for (var name in props) {
                 (name == 'bubbles') ? (bubbles = !!props[name]) : (event[name] = props[name]);
             }
@@ -36,9 +36,12 @@
         event.initEvent(type, bubbles, true);
         return event;
     };
+
+    // alias to prototype
+    xv.fn = xv.prototype;
     
     // find all event handlers of given type
-    xv.prototype.findHandlers = function (type, fn) {
+    xv.fn.findHandlers = function (type, fn) {
         var self = this;
         return (self.handlers[type] || []).filter(function (handler) {
             return handler && (!fn || fn === handler.fn);
@@ -46,12 +49,12 @@
     };
     
     // find all added events
-    xv.prototype.findAddedEvents = function () {
+    xv.fn.findAddedEvents = function () {
         return Object.keys(this.handlers);
     };
     
     // add event listener
-    xv.prototype.on = function (types, callback, data, capture) {
+    xv.fn.on = function (types, callback, data, capture) {
         var self = this;
         var elem = self.el;
         elem && findEvents(types).forEach(function(type){
@@ -78,7 +81,7 @@
     };
     
     // remove event listener
-    xv.prototype.off = function (types, callback, capture) {
+    xv.fn.off = function (types, callback, capture) {
         var self = this,
             elem = self.el;
         elem && (types ? findEvents(types) : Object.keys(self.handlers)).forEach(function(type){
@@ -92,19 +95,18 @@
     };
     
     // fire events with given types
-    xv.prototype.trigger = function (types, args) {
+    xv.fn.trigger = function (types, props) {
         var self = this,
             elem = self.el;
         elem && findEvents(types).forEach(function(type){
-            event = xv.Event(type);
-            event._args = args;
+            event = xv.Event(type, props);
             elem.dispatchEvent(event);
         });
         return self;
     };
     
     // remove everything
-    xv.prototype.destroy = function () {
+    xv.fn.destroy = function () {
         this.off();
         delete this.el._xEvent;
         this.el = undefined;
@@ -113,6 +115,11 @@
         delete this.handlers;
         this.constructor = Object;
     };
+
+    // add some alias
+    // ['click', 'mousedown', 'mouseup', 'mouseenter', 'mouseout'].forEach(function(eventName){
+    //     xv.fn[eventName] = function(callback){ return this.on(eventName, callback) };
+    // });
     
     window.xEvent = xv;
     window.XV === undefined && (window.XV = xv);
