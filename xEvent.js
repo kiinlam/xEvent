@@ -1,3 +1,8 @@
+/**
+ * xEvent.js
+ * https://github.com/kiinlam/xEvent
+ */
+
 ;(function (window) {
     
     // xv constructor
@@ -27,13 +32,18 @@
     
     // make a DocumentEvent
     xv.Event = function (type, props) {
-        var event = document.createEvent('Event'), bubbles = true;
-        if (typeof props === 'object') {
-            for (var name in props) {
-                (name == 'bubbles') ? (bubbles = !!props[name]) : (event[name] = props[name]);
+        var event, bubbles = true;
+        if (CustomEvent) {
+            event = new CustomEvent(type, typeof props === 'object' && 'detail' in props ? props : {'detail': props});
+        } else {
+            event = document.createEvent('Event');
+            if (typeof props === 'object') {
+                for (var name in props) {
+                    (name == 'bubbles') ? (bubbles = !!props[name]) : (event[name] = props[name]);
+                }
             }
+            event.initEvent(type, bubbles, true);
         }
-        event.initEvent(type, bubbles, true);
         return event;
     };
 

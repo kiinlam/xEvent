@@ -11,31 +11,10 @@
     <script>
         var el = document.querySelector('h1');
         var vh1 = XV(el);
-        function xv2 (e) {
-            console.log(e.data);
-        }
         vh1.on('xv', function(e) {
-            console.log(e.data);
-            console.log(e._args);
+            console.log(e);
         }, 'xv_data');
-        vh1.on('xv2', xv2, 'on_xv2_data');
-        vh1.trigger('xv xv2', {_args:'trigger_xv_args'});
-        // output
-        // xv_data
-        // xv_args
-        // xv2_data
-        vh1.on('xv3 xv4', function () {console.log('xv3 xv4')});
-        vh1.trigger('xv3');
-        console.log('移除xv4');
-        vh1.off('xv4');
-        console.log('触发xv4，结果：');
-        vh1.trigger('xv4');
-        console.log('绑定click事件');
-        vh1.on('click', function () {console.log('click')});
-        console.log(vh1);
-        console.log('毁灭');
-        vh1.destroy();
-        console.log(vh1);
+        vh1.trigger('xv', 'trigger_xv_detail');
     </script>
 </body>
 </html>
